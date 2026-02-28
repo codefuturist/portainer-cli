@@ -514,3 +514,8 @@ class PortainerCLI(object):
             plac.call(self.update_registry, args)
         elif command == self.COMMAND_REQUEST:
             plac.call(self.request, args)
+
+
+def main():
+    p = PortainerCLI()
+    plac.call(p.main)

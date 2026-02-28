@@ -1,9 +1,14 @@
-sdist:
-	rm -rf dist/*
-	pipenv run python setup.py sdist bdist_wheel
+build:
+	uv build
 
 install:
-	pipenv install --dev
+	uv sync
+
+install-dev:
+	uv sync --group dev
 
 lint:
-	pipenv run flake8
+	uv run flake8 portainer_cli/
+
+run:
+	uv run portainer-cli

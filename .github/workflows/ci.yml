@@ -11,18 +11,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v5
         with:
           python-version: "3.13"
-      - run: pip install flake8
-      - run: flake8 portainer_cli/
+      - run: uv sync --group dev
+      - run: uv run flake8 portainer_cli/
 
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v5
         with:
           python-version: "3.13"
-      - run: pip install .
-      - run: portainer-cli --help
+      - run: uv sync
+      - run: uv run portainer-cli --help
