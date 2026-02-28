@@ -8,10 +8,6 @@ import validators
 from requests import Request, Session
 
 
-try:
-    FileNotFoundError
-except NameError:
-    FileNotFoundError = IOError
 
 __version__ = '0.3.0'
 
@@ -64,7 +60,7 @@ class PortainerCLI(object):
 
     @base_url.setter
     def base_url(self, value):
-        if not validators.url(value):
+        if not validators.url(value, simple_host=True):
             raise Exception('Insert a valid base URL')
         self._base_url = value if value.endswith('/') else '{}/'.format(value)
         self.persist()
@@ -159,23 +155,6 @@ class PortainerCLI(object):
     # retrieve users by their names
     def get_users_by_name(self, names):
         all_users = self.get_users()
-        if not all_users:
-            logger.debug('No users found')
-            return []
-        users=[]
-        for name in names:
-            # searching for user
-            user = next(u for u in all_users if u['Username'] == name)
-            if not user:
-                logger.warn('User with name \'{}\' not found'.format(name))
-            else:
-                logger.debug('User with name \'{}\' found'.format(name))
-                users.append(user)
-        return users
-    
-    # retrieve users by their names
-    def get_users_by_name(self, names):
-        all_users = self.get_users()
         all_users_by_name = dict(map(
             lambda u: (u['Username'], u),
             all_users,
@@ -184,7 +163,7 @@ class PortainerCLI(object):
         for name in names:
             user = all_users_by_name.get(name)
             if not user:
-                logger.warn('User with name \'{}\' not found'.format(name))
+                logger.warning('User with name \'{}\' not found'.format(name))
             else:
                 logger.debug('User with name \'{}\' found'.format(name))
                 users.append(user)
@@ -205,7 +184,7 @@ class PortainerCLI(object):
         for name in names:
             team = all_teams_by_name.get(name)
             if not team:
-                logger.warn('Team with name \'{}\' not found'.format(name))
+                logger.warning('Team with name \'{}\' not found'.format(name))
             else:
                 logger.debug('Team with name \'{}\' found'.format(name))
                 teams.append(team)
